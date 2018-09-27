@@ -4,7 +4,9 @@ Plays a custom sound effect on Miss/Bomb cut/Level fail
 Currently this plugin just plays an audio clip when notes are missed or bomb was cut or level failed based on the settings.
 
 Changelog v2.0
+
 -Updated to work with BeatSaber 0.11.2
+
 -The plugin now load the sound effects from local files, so it means you can replace them with your own
 
 Changelog v1.1
