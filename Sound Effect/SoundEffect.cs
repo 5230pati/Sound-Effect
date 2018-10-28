@@ -11,10 +11,26 @@ namespace Sound_Effect
     {
         private GameEnergyCounter _energyCounter;
         private BeatmapObjectSpawnController _BMSpawnController;
+        private MainAudioEffects _mainAudioEffects;
         private AudioSource audioSource;
-        private AudioClip[] audioClips = new AudioClip[3];
+        private AudioClip[] audioClips = new AudioClip[4];
 
         private bool bFailed;
+
+        public static bool _dist = false;
+        public static float _distLen = 0.15f;
+
+        public static bool _miss = false;
+        public static float _missVol = 0.75f;
+
+        public static bool _bomb = false;
+        public static float _bombVol = 0.75f;
+
+        public static bool _hit = false;
+        public static float _hitVol = 0.75f;
+
+        public static bool _fail = false;
+        public static float _failVol = 0.75f;
 
         private IEnumerator GetEnergyCounter()
         {
@@ -30,7 +46,8 @@ namespace Sound_Effect
 
             if (_energyCounter != null)
             {
-                _energyCounter.gameEnergyDidReach0Event += _energyCounter_gameEnergyDidReach0Event;
+                if (_fail)
+                    _energyCounter.gameEnergyDidReach0Event += _energyCounter_gameEnergyDidReach0Event;
             }
         }
 
@@ -46,16 +63,25 @@ namespace Sound_Effect
                     loaded = true;
             }
 
-            if (PlayerPrefs.HasKey("SoundEffectType"))
+            if (_BMSpawnController != null)
             {
-                if (_BMSpawnController != null)
-                {
-                    string savedSET = PlayerPrefs.GetString("SoundEffectType");
-                    if (savedSET.Contains("Bomb"))
-                        _BMSpawnController.noteWasCutEvent += _BMSpawnController_noteWasCutEvent;
-                    if (savedSET.Contains("Miss"))
-                        _BMSpawnController.noteDidStartJumpEvent += _BMSpawnController_noteDidStartJumpEvent;
-                }
+                if (_bomb || _hit)
+                    _BMSpawnController.noteWasCutEvent += _BMSpawnController_noteWasCutEvent;
+                if (_miss)
+                    _BMSpawnController.noteDidStartJumpEvent += _BMSpawnController_noteDidStartJumpEvent;
+            }
+        }
+
+        private IEnumerator GetMainAudioEffects()
+        {
+            bool loaded = false;
+            while (!loaded)
+            {
+                _mainAudioEffects = Resources.FindObjectsOfTypeAll<MainAudioEffects>().FirstOrDefault();
+                if (_mainAudioEffects == null)
+                    yield return new WaitForSeconds(0.1f);
+                else
+                    loaded = true;
             }
         }
 
@@ -80,11 +106,17 @@ namespace Sound_Effect
             try
             {
                 string url0 = System.Windows.Forms.Application.StartupPath + @"\UserData\Bomb.wav";
-                string url1 = System.Windows.Forms.Application.StartupPath + @"\UserData\Miss.wav";
-                string url2 = System.Windows.Forms.Application.StartupPath + @"\UserData\Fail.wav";
                 StartCoroutine(LoadAudioFromFile(0, url0));
+
+                string url1 = System.Windows.Forms.Application.StartupPath + @"\UserData\Miss.wav";
                 StartCoroutine(LoadAudioFromFile(1, url1));
+
+                string url2 = System.Windows.Forms.Application.StartupPath + @"\UserData\Fail.wav";
                 StartCoroutine(LoadAudioFromFile(2, url2));
+
+                string url3 = System.Windows.Forms.Application.StartupPath + @"\UserData\Hit.wav";
+                StartCoroutine(LoadAudioFromFile(3, url3));
+
                 var newGameObject = new GameObject("My Audio Source");
                 audioSource = newGameObject.AddComponent<AudioSource>();
             }
@@ -104,17 +136,28 @@ namespace Sound_Effect
             }
         }
 
+        private IEnumerator LowPass(float time)
+        {
+            for (float i = 0; i <= time; i += Time.deltaTime)
+            {
+                _mainAudioEffects.TriggerLowPass();
+                yield return null;
+            }
+        }
+
         private void Nm_noteDidPassMissedMarkerEvent()
         {
             if (!bFailed)
             {
                 try
                 {
-                    audioSource.PlayOneShot(audioClips[1], 0.75f);
+                    if (_dist)
+                        StartCoroutine(LowPass(_distLen));
+                    audioSource.PlayOneShot(audioClips[1], _missVol);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Sound Effect", MessageBoxButtons.OK);
+                    MessageBox.Show("Miss: " + ex.Message, "Sound Effect", MessageBoxButtons.OK);
                     throw;
                 }
             }
@@ -125,14 +168,32 @@ namespace Sound_Effect
             NoteData noteData = arg2.noteData;
             if (noteData.noteType == NoteType.Bomb)
             {
-                try
+                if (_bomb)
                 {
-                    audioSource.PlayOneShot(audioClips[0], 0.75f);
+                    try
+                    {
+                        audioSource.PlayOneShot(audioClips[0], _bombVol);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Bomb: " + ex.Message, "Sound Effect", MessageBoxButtons.OK);
+                        throw;
+                    }
                 }
-                catch (Exception ex)
+            }
+            else
+            {
+                if (_hit)
                 {
-                    MessageBox.Show(ex.Message, "Sound Effect", MessageBoxButtons.OK);
-                    throw;
+                    try
+                    {
+                        audioSource.PlayOneShot(audioClips[3], _hitVol);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Hit: " + ex.Message, "Sound Effect", MessageBoxButtons.OK);
+                        throw;
+                    }
                 }
             }
         }
@@ -145,6 +206,7 @@ namespace Sound_Effect
             LoadSoundEffects();
             StartCoroutine(GetEnergyCounter());
             StartCoroutine(GetBeatmapObjectSpawnController());
+            StartCoroutine(GetMainAudioEffects());
         }
 
         private void _energyCounter_gameEnergyDidReach0Event()
@@ -152,11 +214,11 @@ namespace Sound_Effect
             bFailed = true;
             try
             {
-                audioSource.PlayOneShot(audioClips[2], 0.75f);
+                audioSource.PlayOneShot(audioClips[2], _failVol);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Sound Effect", MessageBoxButtons.OK);
+                MessageBox.Show("Fail: " + ex.Message, "Sound Effect", MessageBoxButtons.OK);
                 throw;
             }
         }

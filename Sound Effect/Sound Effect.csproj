@@ -80,6 +80,8 @@
   <ItemGroup>
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReflectionUtil.cs" />
+    <Compile Include="SettingsUI.cs" />
     <Compile Include="SoundEffect.cs" />
     <Compile Include="SoundEffectUI.cs" />
   </ItemGroup>

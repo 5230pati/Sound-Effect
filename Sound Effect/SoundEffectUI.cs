@@ -58,7 +58,160 @@ namespace Sound_Effect
                 Console.WriteLine("EXCEPTION ON AWAKE(TRY FIND BUTTONS): " + e);
             }
 
-            CreateSoundEffectButton();
+            //CreateSoundEffectButton();
+
+            CreateSoundEffectSettingsUI();
+        }
+
+        private static void CreateSoundEffectSettingsUI()
+        {
+            float[] volArray = new float[20];
+            float[] distArray = new float[50];
+
+            for (int i = 0; i < 20; i++)
+            {
+                volArray[i] = (float)i * 0.05f;
+            }
+            for (int i = 0; i < 50; i++)
+            {
+                distArray[i] = (float)i * 0.01f;
+            }
+
+            var subMenu = SettingsUI.CreateSubMenu("Sound Effects");
+            var subMenuVol = SettingsUI.CreateSubMenu("Sound Effects Values");
+
+            // Distortion
+            // Enable/disable
+            var distMenuB = subMenu.AddBool("Distortion");
+            distMenuB.GetValue += delegate
+            {
+                return ModPrefs.GetBool(SoundEffectPlugin.PluginName, "Distortion", SoundEffect._dist);
+            };
+            distMenuB.SetValue += delegate (bool value)
+            {
+                SoundEffect._dist = value;
+                ModPrefs.SetBool(SoundEffectPlugin.PluginName, "Distortion", SoundEffect._dist);
+            };
+            // Length
+            var distMenuV = subMenuVol.AddList("Distortion Length", distArray);
+            distMenuV.GetValue += delegate
+            {
+                return ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "DistortionLength", SoundEffect._distLen);
+            };
+            distMenuV.SetValue += delegate (float value)
+            {
+                SoundEffect._distLen = value;
+                ModPrefs.SetFloat(SoundEffectPlugin.PluginName, "DistortionLength", SoundEffect._distLen);
+            };
+            distMenuV.FormatValue += delegate (float value) { return value.ToString(); };
+
+
+
+            // Miss
+            // Enable/disable
+            var missMenuB = subMenu.AddBool("Miss");
+            missMenuB.GetValue += delegate
+            {
+                return ModPrefs.GetBool(SoundEffectPlugin.PluginName, "Miss", SoundEffect._miss);
+            };
+            missMenuB.SetValue += delegate (bool value)
+            {
+                SoundEffect._miss = value;
+                ModPrefs.SetBool(SoundEffectPlugin.PluginName, "Miss", SoundEffect._miss);
+            };
+            // Value
+            var missMenuV = subMenuVol.AddList("Miss Volume", volArray);
+            missMenuV.GetValue += delegate
+            {
+                return ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "MissVolume", SoundEffect._missVol);
+            };
+            missMenuV.SetValue += delegate (float value)
+            {
+                SoundEffect._missVol = value;
+                ModPrefs.SetFloat(SoundEffectPlugin.PluginName, "MissVolume", SoundEffect._missVol);
+            };
+            missMenuV.FormatValue += delegate (float value) { return value.ToString(); };
+
+
+
+            // Bomb
+            // Enable/disable
+            var bombMenuB = subMenu.AddBool("Bomb");
+            bombMenuB.GetValue += delegate
+            {
+                return ModPrefs.GetBool(SoundEffectPlugin.PluginName, "Bomb", SoundEffect._bomb);
+            };
+            bombMenuB.SetValue += delegate (bool value)
+            {
+                SoundEffect._bomb = value;
+                ModPrefs.SetBool(SoundEffectPlugin.PluginName, "Bomb", SoundEffect._bomb);
+            };
+            // Value
+            var bombMenuV = subMenuVol.AddList("Bomb Volume", volArray);
+            bombMenuV.GetValue += delegate
+            {
+                return ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "BombVolume", SoundEffect._bombVol);
+            };
+            bombMenuV.SetValue += delegate (float value)
+            {
+                SoundEffect._bombVol = value;
+                ModPrefs.SetFloat(SoundEffectPlugin.PluginName, "BombVolume", SoundEffect._bombVol);
+            };
+            bombMenuV.FormatValue += delegate (float value) { return value.ToString(); };
+
+
+
+            // Hit
+            // Enable/disable
+            var hitMenuB = subMenu.AddBool("Hit");
+            hitMenuB.GetValue += delegate
+            {
+                return ModPrefs.GetBool(SoundEffectPlugin.PluginName, "Hit", SoundEffect._hit);
+            };
+            hitMenuB.SetValue += delegate (bool value)
+            {
+                SoundEffect._hit = value;
+                ModPrefs.SetBool(SoundEffectPlugin.PluginName, "Hit", SoundEffect._hit);
+            };
+            // Value
+            var hitMenuV = subMenuVol.AddList("Hit Volume", volArray);
+            hitMenuV.GetValue += delegate
+            {
+                return ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "HitVolume", SoundEffect._hitVol);
+            };
+            hitMenuV.SetValue += delegate (float value)
+            {
+                SoundEffect._hitVol = value;
+                ModPrefs.SetFloat(SoundEffectPlugin.PluginName, "HitVolume", SoundEffect._hitVol);
+            };
+            hitMenuV.FormatValue += delegate (float value) { return value.ToString(); };
+
+
+
+            // Fail
+            // Enable/disable
+            var failMenuB = subMenu.AddBool("Fail");
+            failMenuB.GetValue += delegate
+            {
+                return ModPrefs.GetBool(SoundEffectPlugin.PluginName, "Fail", SoundEffect._fail);
+            };
+            failMenuB.SetValue += delegate (bool value)
+            {
+                SoundEffect._fail = value;
+                ModPrefs.SetBool(SoundEffectPlugin.PluginName, "Fail", SoundEffect._fail);
+            };
+            // Value
+            var failMenuV = subMenuVol.AddList("Fail Volume", volArray);
+            failMenuV.GetValue += delegate
+            {
+                return ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "FailVolume", SoundEffect._failVol);
+            };
+            failMenuV.SetValue += delegate (float value)
+            {
+                SoundEffect._failVol = value;
+                ModPrefs.SetFloat(SoundEffectPlugin.PluginName, "FailVolume", SoundEffect._failVol);
+            };
+            failMenuV.FormatValue += delegate (float value) { return value.ToString(); };
         }
 
         private void CreateSoundEffectButton()
