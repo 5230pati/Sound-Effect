@@ -66,6 +66,17 @@ namespace Sound_Effect
             if (arg0.name == "Menu")
             {
                 SoundEffectUI.OnLoad();
+
+                SoundEffect._dist = ModPrefs.GetBool(SoundEffectPlugin.PluginName, "Distortion", true, false);
+                SoundEffect._distLen = ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "DistortionLength", 0.15f, false);
+                SoundEffect._miss = ModPrefs.GetBool(SoundEffectPlugin.PluginName, "Miss", true, false);
+                SoundEffect._missVol = ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "MissVolume", 0.75f, false);
+                SoundEffect._bomb = ModPrefs.GetBool(SoundEffectPlugin.PluginName, "Bomb", true, false);
+                SoundEffect._bombVol = ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "BombVolume", 0.75f, false);
+                SoundEffect._hit = ModPrefs.GetBool(SoundEffectPlugin.PluginName, "Hit", true, false);
+                SoundEffect._hitVol = ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "HitVolume", 0.75f, false);
+                SoundEffect._fail = ModPrefs.GetBool(SoundEffectPlugin.PluginName, "Fail", true, false);
+                SoundEffect._failVol = ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "FailVolume", 0.75f, false);
             }
         }
 
@@ -77,7 +88,6 @@ namespace Sound_Effect
 
         public void OnLevelWasLoaded(int level)
         {
-
         }
 
         public void OnLevelWasInitialized(int level)

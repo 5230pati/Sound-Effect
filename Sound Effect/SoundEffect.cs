@@ -1,3 +1,4 @@
+using IllusionPlugin;
 using System;
 using System.Linq;
 using System.Media;
@@ -32,6 +33,7 @@ namespace Sound_Effect
         public static bool _fail = false;
         public static float _failVol = 0.75f;
 
+        /////////////////////////////////////////////////////
         private IEnumerator GetEnergyCounter()
         {
             bool loaded = false;
