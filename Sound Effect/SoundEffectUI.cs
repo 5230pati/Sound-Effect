@@ -28,7 +28,6 @@ namespace Sound_Effect
 
         public static List<Sprite> icons = new List<Sprite>();
 
-
         internal static void OnLoad()
         {
             if (_instance != null)
@@ -65,14 +64,14 @@ namespace Sound_Effect
 
         private static void CreateSoundEffectSettingsUI()
         {
-            float[] volArray = new float[20];
-            float[] distArray = new float[50];
+            float[] volArray = new float[21];
+            float[] distArray = new float[51];
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i <= 20; i++)
             {
                 volArray[i] = (float)i * 0.05f;
             }
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i <= 50; i++)
             {
                 distArray[i] = (float)i * 0.01f;
             }
@@ -185,6 +184,33 @@ namespace Sound_Effect
                 ModPrefs.SetFloat(SoundEffectPlugin.PluginName, "HitVolume", SoundEffect._hitVol);
             };
             hitMenuV.FormatValue += delegate (float value) { return value.ToString(); };
+
+
+
+            // Hit
+            // Enable/disable
+            var badMenuB = subMenu.AddBool("BadHit");
+            badMenuB.GetValue += delegate
+            {
+                return ModPrefs.GetBool(SoundEffectPlugin.PluginName, "BadHit", SoundEffect._bad);
+            };
+            badMenuB.SetValue += delegate (bool value)
+            {
+                SoundEffect._bad = value;
+                ModPrefs.SetBool(SoundEffectPlugin.PluginName, "BadHit", SoundEffect._bad);
+            };
+            // Value
+            var badMenuV = subMenuVol.AddList("Bad Hit Volume", volArray);
+            badMenuV.GetValue += delegate
+            {
+                return ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "BadHitVolume", SoundEffect._badVol);
+            };
+            badMenuV.SetValue += delegate (float value)
+            {
+                SoundEffect._badVol = value;
+                ModPrefs.SetFloat(SoundEffectPlugin.PluginName, "BadHitVolume", SoundEffect._badVol);
+            };
+            badMenuV.FormatValue += delegate (float value) { return value.ToString(); };
 
 
 

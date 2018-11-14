@@ -14,7 +14,7 @@ namespace Sound_Effect
     public class SoundEffectPlugin : IPlugin
     {
         public string Name => "Sound Effect";
-        public string Version => "2.2.0";
+        public string Version => "2.3.1";
 
         public static string PluginName
         {
@@ -75,6 +75,8 @@ namespace Sound_Effect
                 SoundEffect._bombVol = ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "BombVolume", 0.75f, false);
                 SoundEffect._hit = ModPrefs.GetBool(SoundEffectPlugin.PluginName, "Hit", true, false);
                 SoundEffect._hitVol = ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "HitVolume", 0.75f, false);
+                SoundEffect._bad = ModPrefs.GetBool(SoundEffectPlugin.PluginName, "BadHit", true, false);
+                SoundEffect._badVol = ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "BadHitVolume", 0.75f, false);
                 SoundEffect._fail = ModPrefs.GetBool(SoundEffectPlugin.PluginName, "Fail", true, false);
                 SoundEffect._failVol = ModPrefs.GetFloat(SoundEffectPlugin.PluginName, "FailVolume", 0.75f, false);
             }

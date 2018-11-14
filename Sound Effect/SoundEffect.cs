@@ -14,7 +14,7 @@ namespace Sound_Effect
         private BeatmapObjectSpawnController _BMSpawnController;
         private MainAudioEffects _mainAudioEffects;
         private AudioSource audioSource;
-        private AudioClip[] audioClips = new AudioClip[4];
+        private AudioClip[] audioClips = new AudioClip[5];
 
         private bool bFailed;
 
@@ -29,6 +29,9 @@ namespace Sound_Effect
 
         public static bool _hit = false;
         public static float _hitVol = 0.75f;
+
+        public static bool _bad = false;
+        public static float _badVol = 0.75f;
 
         public static bool _fail = false;
         public static float _failVol = 0.75f;
@@ -119,6 +122,9 @@ namespace Sound_Effect
                 string url3 = System.Windows.Forms.Application.StartupPath + @"\UserData\Hit.wav";
                 StartCoroutine(LoadAudioFromFile(3, url3));
 
+                string url4 = System.Windows.Forms.Application.StartupPath + @"\UserData\BadHit.wav";
+                StartCoroutine(LoadAudioFromFile(4, url4));
+
                 var newGameObject = new GameObject("My Audio Source");
                 audioSource = newGameObject.AddComponent<AudioSource>();
             }
@@ -155,7 +161,8 @@ namespace Sound_Effect
                 {
                     if (_dist)
                         StartCoroutine(LowPass(_distLen));
-                    audioSource.PlayOneShot(audioClips[1], _missVol);
+                    else
+                        audioSource.PlayOneShot(audioClips[1], _missVol);
                 }
                 catch (Exception ex)
                 {
@@ -185,17 +192,17 @@ namespace Sound_Effect
             }
             else
             {
-                if (_hit)
+                try
                 {
-                    try
-                    {
+                    if (_hit && arg3.saberTypeOK)
                         audioSource.PlayOneShot(audioClips[3], _hitVol);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Hit: " + ex.Message, "Sound Effect", MessageBoxButtons.OK);
-                        throw;
-                    }
+                    else if (_bad && !arg3.saberTypeOK)
+                        audioSource.PlayOneShot(audioClips[4], _badVol);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Hit: " + ex.Message, "Sound Effect", MessageBoxButtons.OK);
+                    throw;
                 }
             }
         }
