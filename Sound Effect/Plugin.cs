@@ -14,7 +14,7 @@ namespace Sound_Effect
     public class SoundEffectPlugin : IPlugin
     {
         public string Name => "Sound Effect";
-        public string Version => "2.3.1";
+        public string Version => "2.3.2";
 
         public static string PluginName
         {

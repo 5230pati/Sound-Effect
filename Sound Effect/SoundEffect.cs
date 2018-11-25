@@ -194,9 +194,10 @@ namespace Sound_Effect
             {
                 try
                 {
-                    if (_hit && arg3.saberTypeOK)
+                    if (_hit && arg3.saberTypeOK && arg3.allIsOK)
                         audioSource.PlayOneShot(audioClips[3], _hitVol);
-                    else if (_bad && !arg3.saberTypeOK)
+                    //else if (_bad && !arg3.saberTypeOK)
+                    else if (_bad && !arg3.allIsOK)
                         audioSource.PlayOneShot(audioClips[4], _badVol);
                 }
                 catch (Exception ex)
